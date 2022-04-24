@@ -11,51 +11,29 @@ from shapely.geometry.polygon import Polygon
 
 from interpolate import main as interpolate_main
 
-# from multiplex import main as multiplex_main
 
-# pattern = re.compile("sbottom_(\d+)_(\d+)_(\d+)")
-#
-# def make_harvest_from_result(key, result):
-#     m = pattern.search(key)
-#     masses = list(map(int, m.groups()))
-#     return {
-#         "CLs": result["CLs_obs"],
-#         "CLsexp": result["CLs_exp"][2],
-#         "clsd1s": result["CLs_exp"][1],
-#         "clsd2s": result["CLs_exp"][0],
-#         "clsu1s": result["CLs_exp"][3],
-#         "clsu2s": result["CLs_exp"][4],
-#         "failedstatus": 0,
-#         "mn1": masses[2],
-#         "mn2": masses[1],
-#         "msb": masses[0],
-#         "upperLimit": -1,
-#         "expectedUpperLimit": -1,
-#     }
+def harvest_from_result(results_dict):
+    harvests = {
+        key: {
+            "CLs": values["CLs_obs"],
+            "CLsexp": values["CLs_exp"][2],
+            "clsd1s": values["CLs_exp"][1],
+            "clsd2s": values["CLs_exp"][0],
+            "clsu1s": values["CLs_exp"][3],
+            "clsu2s": values["CLs_exp"][4],
+            "mn1": values["mass_hypotheses"][0],
+            "mn2": values["mass_hypotheses"][1],
+            "failedstatus": 0,
+            "upperLimit": -1,
+            "expectedUpperLimit": -1,
+        }
+        for key, values in results_dict.items()
+    }
 
-
-# def harvest_results(regions):
-#     dataList = []
-#     for region in regions:
-#         harvest = []
-#         files = "results/region{region}.result.sbottom_*_*_*.json".format(
-#             region=region,
-#         )
-#         for fname in glob.glob(files):
-#             result = json.load(open(fname))
-#             this_harvest = (fname, result)
-
-#             if this_harvest["mn1"] != 60:
-#                 continue
-#             harvest.append(this_harvest)
-#         dataList.append((f"region{region}", harvest))
-#     return dataList
+    return harvests
 
 
-def make_interpolated_results(dataList):
-    if not (dataList[0][1] or dataList[1][1]):
-        return None, None
-
+def make_interpolated_results(results):
     # d = {
     #     "figureOfMerit": "CLsexp",
     #     "modelDef": "mn2,mn1",
@@ -99,33 +77,22 @@ def make_interpolated_results(dataList):
     }
     args = namedtuple("Args", kwargs.keys())(**kwargs)
     # r = interpolate_main(args, multiplex_data)
-    with open("harvests.json") as read_file:
-        _harvests = json.load(read_file)
-    r = interpolate_main(args, inputData=_harvests)
-    return r, dataList
+
+    harvests = harvest_from_result(results)
+
+    return interpolate_main(args, inputData=harvests)
 
 
-def make_plot(ax, dataList, **kwargs):
-    # ax.cla()
-    # ax.set_xlim(300, 1700)
-    # ax.set_ylim(198, 1700)
+def make_plot(ax, results, **kwargs):
 
     if kwargs.get("showPoints", False):
-        # y = np.asarray([[xx["mn1"], xx["mn2"]] for xx in dataList[0][1]])
-        # ax.scatter(y[:, 0], y[:, 1], s=20, alpha=0.2)
-        # y = np.asarray([[xx["mn1"], xx["mn2"]] for xx in dataList[1][1]])
-        # ax.scatter(y[:, 0], y[:, 1], s=10, alpha=0.2)
-
-        with open("results.json") as read_file:
-            _results = json.load(read_file)
-
         mass_ranges = np.asarray(
-            [values["mass_hypotheses"] for _, values in _results.items()]
+            [values["mass_hypotheses"] for _, values in results.items()]
         ).T
         ax.scatter(*mass_ranges, s=20, alpha=0.2)
 
     if kwargs.get("showInterPolated", False):
-        interpolated_bands, _ = make_interpolated_results(dataList)
+        interpolated_bands = make_interpolated_results(results)
         if interpolated_bands is None:
             print("ERROR: interpolation failed")
             return 1
