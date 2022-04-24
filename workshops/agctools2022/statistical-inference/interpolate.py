@@ -195,7 +195,8 @@ def harvestToDict(args, inputJSON, tmpListOfContours=None):
 
     modelDict = {}
 
-    for sample in inputJSON:
+    # for sample in inputJSON:
+    for sample in inputJSON.values():
 
         ## Allowing filtering of entries via a constraints file
         if args.fixedParamsFile:
