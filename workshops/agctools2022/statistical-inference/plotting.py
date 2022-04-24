@@ -83,7 +83,7 @@ def make_interpolated_results(results):
     return interpolate_main(args, inputData=harvests)
 
 
-def make_plot(ax, results, **kwargs):
+def plot_contour(ax, results, **kwargs):
 
     if kwargs.get("showPoints", False):
         mass_ranges = np.asarray(
