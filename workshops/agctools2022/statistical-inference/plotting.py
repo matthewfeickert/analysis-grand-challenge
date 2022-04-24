@@ -10,7 +10,8 @@ from descartes import PolygonPatch
 from shapely.geometry.polygon import Polygon
 
 from interpolate import main as interpolate_main
-from multiplex import main as multiplex_main
+
+# from multiplex import main as multiplex_main
 
 # pattern = re.compile("sbottom_(\d+)_(\d+)_(\d+)")
 #
@@ -103,7 +104,7 @@ def make_interpolated_results(dataList):
 
 
 def make_plot(ax, dataList, **kwargs):
-    ax.cla()
+    # ax.cla()
     # ax.set_xlim(300, 1700)
     # ax.set_ylim(198, 1700)
 
@@ -159,7 +160,7 @@ def make_plot(ax, dataList, **kwargs):
             label="Observed Limit",
         )
 
-    apply_decorations(ax, kwargs["label"])
+    # apply_decorations(ax, kwargs["label"])
 
 
 def apply_decorations(ax, label):
