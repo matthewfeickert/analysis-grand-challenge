@@ -57,7 +57,7 @@ def make_interpolated_results(dataList):
 
     d = {
         "figureOfMerit": "CLsexp",
-        "modelDef": "msb,mn2,mn1",
+        "modelDef": "mn2,mn1",
         "ignoreTheory": True,
         "ignoreUL": True,
         "debug": False,
@@ -77,7 +77,7 @@ def make_interpolated_results(dataList):
         "areaThreshold": 0,
         "xResolution": 100,
         "yResolution": 100,
-        "xVariable": "msb",
+        "xVariable": "mn1",
         "yVariable": "mn2",
         "closedBands": False,
         "forbiddenFunction": "x",
@@ -105,10 +105,18 @@ def make_plot(ax, dataList, **kwargs):
     ax.set_ylim(198, 1700)
 
     if kwargs.get("showPoints", False):
-        y = np.asarray([[xx["msb"], xx["mn2"]] for xx in dataList[0][1]])
-        ax.scatter(y[:, 0], y[:, 1], s=20, alpha=0.2)
-        y = np.asarray([[xx["msb"], xx["mn2"]] for xx in dataList[1][1]])
-        ax.scatter(y[:, 0], y[:, 1], s=10, alpha=0.2)
+        # y = np.asarray([[xx["mn1"], xx["mn2"]] for xx in dataList[0][1]])
+        # ax.scatter(y[:, 0], y[:, 1], s=20, alpha=0.2)
+        # y = np.asarray([[xx["mn1"], xx["mn2"]] for xx in dataList[1][1]])
+        # ax.scatter(y[:, 0], y[:, 1], s=10, alpha=0.2)
+
+        with open("results.json") as read_file:
+            _results = json.load(read_file)
+
+        mass_ranges = np.asarray(
+            [values["mass_hypotheses"] for _, values in _results.items()]
+        ).T
+        ax.scatter(*mass_ranges, s=20, alpha=0.2)
 
     if kwargs.get("showInterPolated", False):
         r, x = make_interpolated_results(dataList)
@@ -148,7 +156,7 @@ def make_plot(ax, dataList, **kwargs):
             label="Observed Limit",
         )
 
-    apply_decorations(ax, kwargs["label"])
+    # apply_decorations(ax, kwargs["label"])
 
 
 def apply_decorations(ax, label):
