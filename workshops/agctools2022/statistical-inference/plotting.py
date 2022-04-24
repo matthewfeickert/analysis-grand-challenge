@@ -206,7 +206,7 @@ def apply_decorations(ax, label):
     ax.legend(loc=(0.05, 0.6))
     ax.xaxis.set_label_coords(1.0, -0.1)
     ax.yaxis.set_label_coords(-0.15, 1.0)
-    ax.plot([200, 1400], [200, 1400], color="grey", linestyle="dashdot")
+    # ax.plot([200, 1400], [200, 1400], color="grey", linestyle="dashdot")
 
 
 if __name__ == "__main__":
