@@ -25,6 +25,7 @@ import math
 import sys
 
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import numpy as np
 import scipy.interpolate
 import scipy.stats
@@ -448,7 +449,7 @@ def interpolateSurface(
         xymeshgrid[1] = xymeshgrid[1] / yScaling
 
         # Turn this surface into contours!
-        contourList = getContourPoints(xymeshgrid[0], xymeshgrid[1], ZI, args.level)
+        contourList = get_contour_points(xymeshgrid[0], xymeshgrid[1], ZI, args.level)
 
         array_data[whichContour] = []
         for contour in contourList:
@@ -475,27 +476,22 @@ def truncateSignificances(args, modelDict, sigmax=5):
     return
 
 
-def getContourPoints(xi, yi, zi, level):
+def get_contour_points(xi, yi, zi, level):
+    fig = Figure()
+    ax = fig.subplots()
 
-    plt.ioff()
-    f, ax = plt.subplots(1, 1)
     c = ax.contour(xi, yi, zi, [level])
     contour = c.collections[0]
-    plt.ion()
 
-    contourList = []
+    # contour_list = []
+    # for i in range(len(contour.get_paths())):
+    #     vertices = contour.get_paths()[i].vertices
+    #     contour_list.append(vertices.T)
 
-    for i in range(len(contour.get_paths())):
-        v = contour.get_paths()[i].vertices
-
-        x = v[:, 0]
-        y = v[:, 1]
-
-        contourList.append((x, y))
-
-    plt.close()
-    del f
-    return contourList
+    return [
+        contour.get_paths()[path_idx].vertices.T
+        for path_idx in range(len(contour.get_paths()))
+    ]
 
 
 def createBandFromContours(args, contour1, contour2=None):
