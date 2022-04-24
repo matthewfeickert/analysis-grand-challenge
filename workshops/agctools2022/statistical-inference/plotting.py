@@ -55,17 +55,17 @@ def make_interpolated_results(dataList):
     if not (dataList[0][1] or dataList[1][1]):
         return None, None
 
-    d = {
-        "figureOfMerit": "CLsexp",
-        "modelDef": "mn2,mn1",
-        "ignoreTheory": True,
-        "ignoreUL": True,
-        "debug": False,
-    }
-    args = namedtuple("Args", d.keys())(**d)
-    multiplex_data = multiplex_main(args, inputDataList=dataList).to_dict(
-        orient="records"
-    )
+    # d = {
+    #     "figureOfMerit": "CLsexp",
+    #     "modelDef": "mn2,mn1",
+    #     "ignoreTheory": True,
+    #     "ignoreUL": True,
+    #     "debug": False,
+    # }
+    # args = namedtuple("Args", d.keys())(**d)
+    # multiplex_data = multiplex_main(args, inputDataList=dataList).to_dict(
+    #     orient="records"
+    # )
 
     kwargs = {
         "nominalLabel": "Nominal",
@@ -95,14 +95,17 @@ def make_interpolated_results(dataList):
         "fixedParamsFile": "",
     }
     args = namedtuple("Args", kwargs.keys())(**kwargs)
-    r = interpolate_main(args, multiplex_data)
+    # r = interpolate_main(args, multiplex_data)
+    with open("harvests.json") as read_file:
+        _harvests = json.load(read_file)
+    r = interpolate_main(args, inputData=_harvests)
     return r, dataList
 
 
 def make_plot(ax, dataList, **kwargs):
     ax.cla()
-    ax.set_xlim(300, 1700)
-    ax.set_ylim(198, 1700)
+    # ax.set_xlim(300, 1700)
+    # ax.set_ylim(198, 1700)
 
     if kwargs.get("showPoints", False):
         # y = np.asarray([[xx["mn1"], xx["mn2"]] for xx in dataList[0][1]])
@@ -156,12 +159,12 @@ def make_plot(ax, dataList, **kwargs):
             label="Observed Limit",
         )
 
-    # apply_decorations(ax, kwargs["label"])
+    apply_decorations(ax, kwargs["label"])
 
 
 def apply_decorations(ax, label):
-    ax.set_xlim(300, 1700)
-    ax.set_ylim(200, 1700)
+    # ax.set_xlim(300, 1700)
+    # ax.set_ylim(200, 1700)
     # dictionaries to hold the styles for re-use
     text_fd = dict(ha="left", va="center")
     atlas_fd = dict(weight="bold", style="italic", size=24, **text_fd)
@@ -178,13 +181,13 @@ def apply_decorations(ax, label):
         fontdict=text_fd,
         transform=ax.transAxes,
     )
-    ax.text(
-        0.0,
-        1.035,
-        r"$\tilde{b}_1\tilde{b}_1$ production ; $\tilde{b}_1\to b \tilde{\chi}_2^0$; $m(\tilde{\chi}_1^0)$ = 60 GeV",
-        fontdict=text_fd,
-        transform=ax.transAxes,
-    )
+    # ax.text(
+    #     0.0,
+    #     1.035,
+    #     r"$\tilde{b}_1\tilde{b}_1$ production ; $\tilde{b}_1\to b \tilde{\chi}_2^0$; $m(\tilde{\chi}_1^0)$ = 60 GeV",
+    #     fontdict=text_fd,
+    #     transform=ax.transAxes,
+    # )
 
     ax.text(
         350,
@@ -193,12 +196,12 @@ def apply_decorations(ax, label):
         rotation=35.0,
         fontdict=dict(ha="left", va="center", size=15, color="grey"),
     )
-    ax.set_xlabel(
-        r"$m(\tilde{b}_1)$ [GeV]", fontdict=dict(ha="right", va="center", size=20)
-    )
-    ax.set_ylabel(
-        r"$m(\tilde{\chi}_2^0)$ [GeV]", fontdict=dict(ha="right", va="center", size=20)
-    )
+    # ax.set_xlabel(
+    #     r"$m(\tilde{b}_1)$ [GeV]", fontdict=dict(ha="right", va="center", size=20)
+    # )
+    # ax.set_ylabel(
+    #     r"$m(\tilde{\chi}_2^0)$ [GeV]", fontdict=dict(ha="right", va="center", size=20)
+    # )
 
     ax.legend(loc=(0.05, 0.6))
     ax.xaxis.set_label_coords(1.0, -0.1)
