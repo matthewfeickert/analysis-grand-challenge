@@ -129,54 +129,7 @@ def make_plot(ax, results, **kwargs):
             label="Observed Limit",
         )
 
-    # apply_decorations(ax, kwargs["label"])
-
-
-def apply_decorations(ax, label):
-    # ax.set_xlim(300, 1700)
-    # ax.set_ylim(200, 1700)
-    # dictionaries to hold the styles for re-use
-    text_fd = dict(ha="left", va="center")
-    atlas_fd = dict(weight="bold", style="italic", size=24, **text_fd)
-    internal_fd = dict(size=24, **text_fd)
-
-    # actually drawing the text
-    ax.text(0.05, 0.9, "ATLAS", fontdict=atlas_fd, transform=ax.transAxes)
-    ax.text(0.23, 0.9, label, fontdict=internal_fd, transform=ax.transAxes)
-
-    ax.text(
-        0.05,
-        0.8,
-        "$\sqrt{s} = 13\ \mathrm{TeV}, 139\ \mathrm{fb}^{-1}$\n All limits at 95% CL",
-        fontdict=text_fd,
-        transform=ax.transAxes,
-    )
-    # ax.text(
-    #     0.0,
-    #     1.035,
-    #     r"$\tilde{b}_1\tilde{b}_1$ production ; $\tilde{b}_1\to b \tilde{\chi}_2^0$; $m(\tilde{\chi}_1^0)$ = 60 GeV",
-    #     fontdict=text_fd,
-    #     transform=ax.transAxes,
-    # )
-
-    # ax.text(
-    #     350,
-    #     750,
-    #     r"Kinematically Forbidden $m(\tilde{\chi}_2^0)>m(\tilde{b}_1)$",
-    #     rotation=35.0,
-    #     fontdict=dict(ha="left", va="center", size=15, color="grey"),
-    # )
-    # ax.set_xlabel(
-    #     r"$m(\tilde{b}_1)$ [GeV]", fontdict=dict(ha="right", va="center", size=20)
-    # )
-    # ax.set_ylabel(
-    #     r"$m(\tilde{\chi}_2^0)$ [GeV]", fontdict=dict(ha="right", va="center", size=20)
-    # )
-
-    ax.legend(loc=(0.05, 0.6))
-    ax.xaxis.set_label_coords(1.0, -0.1)
-    ax.yaxis.set_label_coords(-0.15, 1.0)
-    # ax.plot([200, 1400], [200, 1400], color="grey", linestyle="dashdot")
+    return ax
 
 
 if __name__ == "__main__":

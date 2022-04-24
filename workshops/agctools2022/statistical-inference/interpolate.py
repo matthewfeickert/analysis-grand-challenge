@@ -25,10 +25,10 @@ import math
 import sys
 
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 import numpy as np
 import scipy.interpolate
 import scipy.stats
+from matplotlib.figure import Figure
 from shapely.geometry import Polygon
 
 
