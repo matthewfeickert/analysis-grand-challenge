@@ -122,36 +122,36 @@ def make_plot(ax, dataList, **kwargs):
         ax.scatter(*mass_ranges, s=20, alpha=0.2)
 
     if kwargs.get("showInterPolated", False):
-        r, x = make_interpolated_results(dataList)
-        if r is None:
-            return
+        interpolated_bands, _ = make_interpolated_results(dataList)
+        if interpolated_bands is None:
+            print("ERROR: interpolation failed")
+            return 1
 
-        if "Band_1s_0" not in r:
-            return
+        if "Band_1s_0" not in interpolated_bands:
+            print("ERROR: Band_1s_0 not included in interpolation bands")
+            return 1
 
-        x = r["Band_1s_0"][:, 0]
-        y = r["Band_1s_0"][:, 1]
-
-        explabel = r"Expected Limit ($\pm1\sigma$)"
-        p = ax.add_patch(
+        # Expand the transverse of the array into the x,y components of the sequence
+        # for the shell arg of Polygon
+        ax.add_patch(
             PolygonPatch(
-                Polygon(np.stack([x, y]).T),
+                Polygon(np.stack([*interpolated_bands["Band_1s_0"].T]).T),
                 alpha=0.5,
                 facecolor=kwargs.get("color", "steelblue"),
-                label=explabel,
+                label=r"Expected Limit ($\pm1\sigma$)",
             ),
         )
 
-        x = r["Exp_0"][:, 0]
-        y = r["Exp_0"][:, 1]
-        ax.plot(x, y, color="k", linestyle="dashed", alpha=0.5)
-
-        x = r["Obs_0"][:, 0]
-        y = r["Obs_0"][:, 1]
+        # Expand the transverse of the array into x,y args of plot
+        ax.plot(
+            *interpolated_bands["Exp_0"].T,
+            color="black",
+            linestyle="dashed",
+            alpha=0.5,
+        )
 
         ax.plot(
-            x,
-            y,
+            *interpolated_bands["Obs_0"].T,
             color="maroon",
             linewidth=2,
             linestyle="solid",
@@ -189,13 +189,13 @@ def apply_decorations(ax, label):
     #     transform=ax.transAxes,
     # )
 
-    ax.text(
-        350,
-        750,
-        r"Kinematically Forbidden $m(\tilde{\chi}_2^0)>m(\tilde{b}_1)$",
-        rotation=35.0,
-        fontdict=dict(ha="left", va="center", size=15, color="grey"),
-    )
+    # ax.text(
+    #     350,
+    #     750,
+    #     r"Kinematically Forbidden $m(\tilde{\chi}_2^0)>m(\tilde{b}_1)$",
+    #     rotation=35.0,
+    #     fontdict=dict(ha="left", va="center", size=15, color="grey"),
+    # )
     # ax.set_xlabel(
     #     r"$m(\tilde{b}_1)$ [GeV]", fontdict=dict(ha="right", va="center", size=20)
     # )
