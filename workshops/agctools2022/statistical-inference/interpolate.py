@@ -567,8 +567,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--sigmax", type=float, help="maximum significance in sigmas", default=5.0
     )
-    parser.add_argument("--xVariable", "-x", type=str, default="mg")
-    parser.add_argument("--yVariable", "-y", type=str, default="mlsp")
+    parser.add_argument("--xVariable", "-x", type=str)
+    parser.add_argument("--yVariable", "-y", type=str)
     parser.add_argument("--xResolution", type=int, default=100)
     parser.add_argument("--yResolution", type=int, default=100)
 
