@@ -81,6 +81,9 @@ def construct_fileset(n_files_max_per_sample, use_xcache=False, af_name=""):
             if af_name == "ssl-dev":
                 # point to local files on /data
                 file_paths = [f.replace("https://xrootd-local.unl.edu:1094//store/user/", "/data/alheld/") for f in file_paths]
+            if af_name == "bnl":
+                # point to local files on /usatlas/atlas01/atlasdisk/
+                file_paths = [f.replace("https://xrootd-local.unl.edu:1094//store/user/", "/usatlas/atlas01/atlasdisk/users/benjamin/") for f in file_paths]
             nevts_total = sum([f["nevts"] for f in file_list])
             metadata = {"process": process, "variation": variation, "nevts": nevts_total, "xsec": xsec_info[process]}
             fileset.update({f"{process}__{variation}": {"files": file_paths, "metadata": metadata}})
