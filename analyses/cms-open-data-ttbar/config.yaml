@@ -4,8 +4,9 @@ global:
   SERVICEX_IGNORE_CACHE: false
   
   # analysis facility: set to "coffea_casa" for coffea-casa environments, "EAF" for FNAL, "local" for local setups
-  AF: coffea_casa
-  
+  # AF: coffea_casa
+  AF: local  # BNL does not support coffea-casa, so currently just use "local"
+
 benchmarking:
 
   # chunk size to use
