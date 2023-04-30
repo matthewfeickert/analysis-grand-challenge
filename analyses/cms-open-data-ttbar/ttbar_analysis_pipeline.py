@@ -92,7 +92,11 @@ logging.getLogger("cabinetry").setLevel(logging.INFO)
 # %% tags=[]
 ### GLOBAL CONFIGURATION
 # input files per process, set to e.g. 10 (smaller number = faster)
-N_FILES_MAX_PER_SAMPLE = 5
+# N_FILES_MAX_PER_SAMPLE = 5
+N_FILES_MAX_PER_SAMPLE = 10  # 157 GB
+# N_FILES_MAX_PER_SAMPLE = 50  # 678 GB
+# N_FILES_MAX_PER_SAMPLE = 100  # 1 TB
+
 
 # enable Dask
 USE_DASK = True
@@ -302,7 +306,9 @@ class TtbarAnalysis(processor.ProcessorABC):
 # Here, we gather all the required information about the files we want to process: paths to the files and asociated metadata.
 
 # %% tags=[]
-fileset = utils.construct_fileset(N_FILES_MAX_PER_SAMPLE, use_xcache=False, af_name=config["benchmarking"]["AF_NAME"])  # local files on /data for ssl-dev
+# local files on /data for ssl-dev
+# local files on /usatlas/atlas01/atlasdisk/ for bnl
+fileset = utils.construct_fileset(N_FILES_MAX_PER_SAMPLE, use_xcache=False, af_name=config["benchmarking"]["AF_NAME"])
 
 print(f"processes in fileset: {list(fileset.keys())}")
 print(f"\nexample of information in fileset:\n{{\n  'files': [{fileset['ttbar__nominal']['files'][0]}, ...],")
@@ -397,7 +403,13 @@ print(f"\nexecution took {exec_time:.2f} seconds")
 
 # %% tags=[]
 # track metrics
-dataset_source = "/data" if fileset["ttbar__nominal"]["files"][0].startswith("/data") else "https://xrootd-local.unl.edu:1094" # TODO: xcache support
+# TODO: xcache support
+if fileset["ttbar__nominal"]["files"][0].startswith("/data"):
+    dataset_source = "/data"
+elif fileset["ttbar__nominal"]["files"][0].startswith("/usatlas"):
+    dataset_source = "/usatlas/atlas01/atlasdisk/users/"
+else:
+    dataset_source = "https://xrootd-local.unl.edu:1094"
 metrics.update({
     "walltime": exec_time, 
     "num_workers": config["benchmarking"]["NUM_CORES"], 

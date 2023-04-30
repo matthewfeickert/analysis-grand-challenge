@@ -14,8 +14,10 @@ benchmarking:
   
   # metadata to propagate through to metrics
   # "ssl-dev" allows for the switch to local data on /data
-  AF_NAME: coffea_casa
-  
+  # "bnl" allows for the switch to local data on /usatlas/atlas01/atlasdisk/
+  # AF_NAME: coffea_casa
+  AF_NAME: bnl
+
   # currently has no effect
   SYSTEMATICS: all
   
