@@ -3,7 +3,7 @@ authors = ["IRIS-HEP"]
 channels = ["conda-forge"]
 description = "Add a short description here"
 name = "analysis-grand-challenge"
-platforms = ["linux-64"]
+platforms = ["linux-64", "osx-64", "osx-arm64"]
 version = "1.4.0"
 
 [tasks]
